@@ -19,12 +19,23 @@ class SalesRecordStub(object):
                 request_serializer=sale__records__pb2.EmptyMessage.SerializeToString,
                 response_deserializer=sale__records__pb2.PingSalesRecordsResponse.FromString,
                 )
+        self.SendSalesRecord = channel.unary_unary(
+                '/SalesRecord/SendSalesRecord',
+                request_serializer=sale__records__pb2.SalesRecordRequest.SerializeToString,
+                response_deserializer=sale__records__pb2.SalesRecordResponse.FromString,
+                )
 
 
 class SalesRecordServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def PingSalesRecords(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def SendSalesRecord(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -37,6 +48,11 @@ def add_SalesRecordServicer_to_server(servicer, server):
                     servicer.PingSalesRecords,
                     request_deserializer=sale__records__pb2.EmptyMessage.FromString,
                     response_serializer=sale__records__pb2.PingSalesRecordsResponse.SerializeToString,
+            ),
+            'SendSalesRecord': grpc.unary_unary_rpc_method_handler(
+                    servicer.SendSalesRecord,
+                    request_deserializer=sale__records__pb2.SalesRecordRequest.FromString,
+                    response_serializer=sale__records__pb2.SalesRecordResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -62,5 +78,22 @@ class SalesRecord(object):
         return grpc.experimental.unary_unary(request, target, '/SalesRecord/PingSalesRecords',
             sale__records__pb2.EmptyMessage.SerializeToString,
             sale__records__pb2.PingSalesRecordsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def SendSalesRecord(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/SalesRecord/SendSalesRecord',
+            sale__records__pb2.SalesRecordRequest.SerializeToString,
+            sale__records__pb2.SalesRecordResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -1,4 +1,5 @@
 
+import os
 import grpc
 import sale_records_pb2
 import sale_records_pb2_grpc
@@ -15,9 +16,17 @@ def main():
     for row in data_readed:
         with grpc.insecure_channel('srv_persistor:50051') as channel:
             stub = sale_records_pb2_grpc.SalesRecordStub(channel) # service to connect
-            request = sale_records_pb2.EmptyMessage()
-            response = stub.PingSalesRecords(request)
-            print(f'GRPC recived: {response.ack}')
+            source = os.environ['HOSTNAME']
+            request = sale_records_pb2.SalesRecordRequest(
+                region = row[0],
+                item_type = row[1],
+                units_sold = row[2],
+                unit_price = row[3],
+                unit_cost = row[4],
+                source = source
+            )
+            response = stub.SendSalesRecord(request)
+            print(f'GRPC received: {response.data}')
 
 if __name__ == "__main__":
     main()
