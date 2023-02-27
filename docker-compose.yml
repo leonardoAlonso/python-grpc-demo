@@ -10,5 +10,7 @@ services:
     build:
       context: ./
       dockerfile: ./srv_reader/Dockerfile
+    ports:
+      - "8000:8000"
     depends_on:
       - srv_persistor

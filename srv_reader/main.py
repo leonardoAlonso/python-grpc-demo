@@ -1,16 +1,23 @@
 
 import os
 import grpc
-import sale_records_pb2
-import sale_records_pb2_grpc
+from fastapi import FastAPI
 
-from repositories.file_repository import FileRepository
+from .compiledpb2 import sale_records_pb2
+from .compiledpb2 import sale_records_pb2_grpc
+from .repositories.file_repository import FileRepository
 
 
+app = FastAPI()
 
-def main():
+@app.get('/')
+def read_root():
+    return {"Hello": "World"}
 
-    file_repository = FileRepository("/tmp/data/10000_sr.csv")
+
+@app.post('/make_grpc_request')
+def make_grpc_request():
+    file_repository = FileRepository("/tmp/data/100_sr.csv")
     data_readed = file_repository.read_data()
 
     for row in data_readed:
@@ -27,6 +34,3 @@ def main():
             )
             response = stub.SendSalesRecord(request)
             print(f'GRPC received: {response.data}')
-
-if __name__ == "__main__":
-    main()

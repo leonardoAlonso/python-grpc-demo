@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import sale_records_pb2 as sale__records__pb2
+from . import sale_records_pb2 as sale__records__pb2
 
 
 class SalesRecordStub(object):
